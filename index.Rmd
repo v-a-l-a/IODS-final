@@ -1,0 +1,8 @@
+---
+title: "Final Assignment"
+author: "Noora Sheridan"
+output: html_document
+theme: yeti
+---
+
+In the final assignment I am analysing Helsinki Region Transport (HSL) customer satisfaction survey.
