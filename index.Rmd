@@ -6,12 +6,12 @@ author:
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output:
   html_document:
-  toc: true
+  theme: yeti
   code_folding: hide
   fig_caption: true
   fig_width: 8
   fig_height: 8
-  theme: yeti
+  
 ---
 
 ## Overview of the research
@@ -30,15 +30,21 @@ In this assignment I am analysing Helsinki Region Transport (HSL) customer satis
 + Frequency of use: the more frequent the use of HSL transportation, the more satisfied customers are (since they haven't changed to another alternative - some users may on purpose avoid HSL leading to less frequent use)
 
 ## The HSL dataset
-Description of your data and its variables. 
-what does it relate to, what do the variables represent, what has been done to the data before analysis?
 
 The original dataset includes all responses to the HSL customer satisfaction survey openly available [here](https://hsl.louhin.com/asty/help). The original dataset has 340 378 observations and 127 variables, with the variables relating to questions about the respondent (e.g. age, gender, occupation), to their travel (e.g. frequency of use of current buss / train, access to a car), to their opinion about HSL transportation (e.g. customer service, tidyness of buses etc., overall grade given to HSL) and to other factors such as how they search for information about timetables or pay for their journeys.
 
 The first task in my data wrangling was to choose the variables to analyse because of the large number of variables and observations in the original dataset. Moreover, when exploring the variables, I noticed that some of them had a lot of missing values. For example the variable 'K1A8L' (the ferry's timetables suit my travel needs) has over 331 000 missing answers, probably explained by the fact that not many people use a ferry on day-to-day travel. However, the variable 'K3B' (overall grade for HSL-region public transport) is only missing some 10 000 responses out of over 340 000.
 
+I kept interesting variables that I suspect are related to satisfaction with HSL, as well as of course the target variable of my study, 'High_grade'. I chose for my analysis 8 different predictor variables based on the critetion that they didn't have many missing observations. I also wanted to ensure the predictor variables were diverse in the sense that they relate to different things (e.g. availability of a car, punctuality of transport). I also kept the variables gender and age that I suspect don't relate to satisfaction, to explore this assumption.
+
 Here are the variables chosen for this study and the statements / questions relating to them:
 
+``` {r colnames hsl}
+hsl <- read.table("/Users/Noora/Documents/IODS-project/IODS-final/hsl.txt", header = TRUE)
+colnames(hsl)
+```
+
++ **Grade**: used to create 
 + **Punctuality**: buses / carriages / ferries run according to timetable (5 levels, 1 = very badly, 5 = very well)
 + **Space**: there are seats available on this route at this time of the day (5 levels, 1 = very badly, 5 = very well)
 + **Meets_needs**: the route / metro / local train meets my travel needs (5 levels, 1 = very badly, 5 = very well)
@@ -49,7 +55,33 @@ Here are the variables chosen for this study and the statements / questions rela
 + **Frequency**: how often on average do you travel on this route? (4 levels, 1 = at least 4 days a week, 2 = 2-3 days a week, 3 = once a week, 4 = less frequently)
 + **High_grade**: overall grade given to HSL-region transportation (2 levels, true = grade 4 or 5, false = grade 1, 2 or 3)
 
-## The variables
+I kept only these variables (and the variable 'Grade' from which 'High_grade' was created from) in my dataset called HSL. Next, I ensured that the categorical variables have data type 'factor'. I then removed all observations with missing values which reduced the number of observations but I was still left with 21 007 observations for my HSL dataset! After this I renamed the variables to those described above, as the original names didn't describe the variables well. I removed the two unused levels of variable 'Gender' from my dataset - these were 3 = 'other' and 4 = 'don't want to say' (my dataset had no observations with the values 3 or 4 for gender). Lastly, I created the new variable 'High_grade' from variable 'Grade' by setting high grade to be true if the overall grade given to HSL was either 4 or 5 when 5 = 'very good' and 1 = 'very bad'. I removed the original 'Grade' variable and then saved the dataset in my local folder.
+
+## Exploring the variables
+
+``` {r hsl first plots P}
+library(ggplot2)
+P1 <- ggplot(hsl, aes(x = Punctuality, fill = High_grade))
+S1 <- ggplot(hsl, aes(x = Space, fill = High_grade))
+M1 <- ggplot(hsl, aes(x = Meets_needs, fill = High_grade))
+G1 <- ggplot(hsl, aes(x = Gender, fill = High_grade))
+A1 <- ggplot(hsl, aes(x = Age, fill = High_grade))
+C1 <- ggplot(hsl, aes(x = Car, fill = High_grade))
+W1 <- ggplot(hsl, aes(x = Worth, fill = High_grade))
+F1 <- ggplot(hsl, aes(x = Frequency, fill = High_grade))
+library(lattice)
+library(gridExtra)
+P <- P1 + geom_bar(position = "fill") + ggtitle("Punctuality and high grade") + scale_fill_brewer(palette = "YlOrRd", guide = F)
+S <- S1 + geom_bar(position = "fill") + ggtitle("Space and high grade") + scale_fill_brewer(palette = "YlOrRd", guide = F)
+M <- M1 + geom_bar(position = "fill") + ggtitle("Meeting needs and high grade") + scale_fill_brewer(palette = "YlOrRd", guide = F)
+G <- G1 + geom_bar(position = "fill") + ggtitle("Gender and high grade") + scale_fill_brewer(palette = "YlOrRd")
+A <- A1 + geom_bar(position = "fill") + ggtitle("Age and high grade") + scale_fill_brewer(palette = "YlOrRd", guide = F)
+C <- C1 + geom_bar(position = "fill") + ggtitle("Car and high grade") + scale_fill_brewer(palette = "YlOrRd")
+W <- W1 + geom_bar(position = "fill") + ggtitle("Worth and high grade") + scale_fill_brewer(palette = "YlOrRd", guide = F)
+Fr <- F1 + geom_bar(position = "fill") + ggtitle("Frequency and high grade") + scale_fill_brewer(palette = "YlOrRd", guide = F)
+grid.arrange(P, S, M, G, nrow = 2)
+grid.arrange(A, Fr, W, C, nrow = 2)
+```
 
 so many plots
 

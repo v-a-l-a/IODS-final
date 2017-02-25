@@ -44,8 +44,10 @@ hsl$Gender <- factor(hsl$Gender)
 summary(hsl$Gender)
 # Gender now has 2 levels, and the correct number of observations in levels 1 and 2
 
-# Lastly, I create a new column to my dataset called High_grade
+# Lastly, I create a new column to my dataset called High_grade, and drop the 'Grade' column
 hsl <- mutate(hsl, High_grade = Grade > 3)
+keep2 <- c("Punctuality", "Space", "Meets_needs", "Gender", "Age", "Car", "Worth", "Frequency", "High_grade")
+hsl <- select(hsl, one_of(keep2))
 
 # Final check that everything is correct
 str(hsl)
