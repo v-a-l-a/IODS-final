@@ -127,7 +127,7 @@ $(document).ready(function () {
 
 <div id="overview-of-the-research" class="section level2">
 <h2>Overview of the research</h2>
-<p>In this assignment I am analysing Helsinki Region Transport (HSL) customer satisfaction survey openly available <a href="https://hsl.louhin.com/asty/help">here</a>. I will use the logistic regression method to see whether or not specific variables such as gender, availability of seats and punctuality of transport to explain the target variable overall grade given to HSL. The aim is to identify factors related to high / low satisfaction with HSL.</p>
+<p>In this assignment I am analysing Helsinki Region Transport (HSL) customer satisfaction survey. This dataset has been wrangled to meet the needs of my analysis, and the wrangling script is available <a href="https://github.com/v-a-l-a/IODS-final/blob/master/hsl_data.R">here</a>. I will use the logistic regression method to see whether or not specific variables such as gender, availability of seats and punctuality of transport to explain the target variable overall grade given to HSL. The aim is to identify factors related to high / low satisfaction with HSL.</p>
 <p><strong>Research question</strong>: Which of the following variables are related to high satisfaction HSL: punctuality, space, meeting travel needs, gender, age, access to a car, value for money and frequency of use?</p>
 <p><strong>My hypothesis</strong>: All of the variables except for gender and age are related to satisfaction with HSL:</p>
 <ul>
@@ -138,19 +138,23 @@ $(document).ready(function () {
 <li>Value for money: customers who see HSL as bringing good value for money are happier with HSL</li>
 <li>Frequency of use: the more frequent the use of HSL transportation, the more satisfied customers are (since they haven’t changed to another alternative - some users may on purpose avoid HSL leading to less frequent use)</li>
 </ul>
-<p>HSL dataset from my local folder.</p>
-<p>The first task in my data wrangling was to choose the variables to analyse, as the dataset has 340 378 observations and 127 variables! Moreover, when exploring the variables, I noticed that some of them have a lot of missing values. For example the variable ‘K1A8L’ (the ferry’s timetables suit my travel needs) has over 331 000 missing answers, probably explained by the fact that not many people use a ferry on day-to-day travel. However, the variable ‘K3B’ (overall grade for HSL-region public transport) is only missing some 10 000 responses out of ovr 340 000.</p>
-<p>Here are the variables chosen for this study:</p>
+</div>
+<div id="the-hsl-dataset" class="section level2">
+<h2>The HSL dataset</h2>
+<p>Description of your data and its variables. what does it relate to, what do the variables represent, what has been done to the data before analysis?</p>
+<p>The original dataset includes all responses to the HSL customer satisfaction survey openly available <a href="https://hsl.louhin.com/asty/help">here</a>. The original dataset has 340 378 observations and 127 variables, with the variables relating to questions about the respondent (e.g. age, gender, occupation), to their travel (e.g. frequency of use of current buss / train, access to a car), to their opinion about HSL transportation (e.g. customer service, tidyness of buses etc., overall grade given to HSL) and to other factors such as how they search for information about timetables or pay for their journeys.</p>
+<p>The first task in my data wrangling was to choose the variables to analyse because of the large number of variables and observations in the original dataset. Moreover, when exploring the variables, I noticed that some of them had a lot of missing values. For example the variable ‘K1A8L’ (the ferry’s timetables suit my travel needs) has over 331 000 missing answers, probably explained by the fact that not many people use a ferry on day-to-day travel. However, the variable ‘K3B’ (overall grade for HSL-region public transport) is only missing some 10 000 responses out of over 340 000.</p>
+<p>Here are the variables chosen for this study and the statements / questions relating to them:</p>
 <ul>
-<li>K3B (Yleisarvosana HSL-alueen joukkoliikenteelle) levels:</li>
-<li>K1A4 (Bussit / vaunut / lautat liikenn??iv??t t??sm??llisesti aikataulun mukaan)</li>
-<li>K2A1 (Istumapaikan saa t??h??n aikaan p??iv??st?? t??ll?? linjalla)</li>
-<li>K2A2 (Linja / metro / paikallisjuna palvelee matkustustarpeitani)</li>
-<li>T6 (Sukupuoli)</li>
-<li>T71 (Ik??ryhm??)</li>
-<li>T8 (Olisiko Teill?? ollut mahdollisuus k??ytt???? henkil??autoa t??ll?? matkalla?)</li>
-<li>T17 (Joukkoliikenne antaa vastinetta rahalle)</li>
-<li>T1 (Kuinka usein keskim????rin matkustatte t??ll?? linjalla?)</li>
+<li><strong>Punctuality</strong>: buses / carriages / ferries run according to timetable (5 levels, 1 = very badly, 5 = very well)</li>
+<li><strong>Space</strong>: there are seats available on this route at this time of the day (5 levels, 1 = very badly, 5 = very well)</li>
+<li><strong>Meets_needs</strong>: the route / metro / local train meets my travel needs (5 levels, 1 = very badly, 5 = very well)</li>
+<li><strong>Gender</strong>: gender (2 levels, 1 = female, 2 = male)</li>
+<li><strong>Age</strong>: age group (5 levels, 1 = 15-19 years, 2 = 20-29, 3 = 30-44, 4 = 45-59, 5 = 60+)</li>
+<li><strong>Car</strong>: would you have had access to a car for this journey (2 levels, 1 = yes, 2 = no)</li>
+<li><strong>Worth</strong>: public transportation gives value for money (2 levels, 1 = yes, 2 = no)</li>
+<li><strong>Frequency</strong>: how often on average do you travel on this route? (4 levels, 1 = at least 4 days a week, 2 = 2-3 days a week, 3 = once a week, 4 = less frequently)</li>
+<li><strong>High_grade</strong>: overall grade given to HSL-region transportation (2 levels, true = grade 4 or 5, false = grade 1, 2 or 3)</li>
 </ul>
 </div>
 <div id="the-variables" class="section level2">
