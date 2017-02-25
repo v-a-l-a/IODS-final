@@ -1,17 +1,15 @@
 ---
-title: "Final Assignment"
-author:
- - name: "Noora Sheridan"
- - "noora.sheridan@aalto.fi"
-date: "`r format(Sys.time(), '%d %B %Y')`"
+title: "IODS course project"
+author: "Noora Sheridan"
 output:
   html_document:
-  theme: yeti
-  code_folding: hide
-  fig_caption: true
-  fig_width: 8
-  fig_height: 8
-  
+    theme: yeti
+    toc: true
+    toc_depth: 2
+    fig_caption: true
+    fig_width: 6
+    fig_height: 4
+    code_folding: hide
 ---
 
 ## Overview of the research
@@ -83,6 +81,5 @@ grid.arrange(P, S, M, G, nrow = 2)
 grid.arrange(A, Fr, W, C, nrow = 2)
 ```
 
-so many plots
+so many plots?
 
-## Logistic regression
