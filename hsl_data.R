@@ -16,8 +16,7 @@ hsl <- select(hsl, one_of(keep))
 
 # I check that the datatypes of each variable seem correct (e.g. none are string)
 str(hsl)
-# All ar integer types, but should be categorical, so changing the datatypes
-hsl$K3B <- as.factor(hsl$K3B)
+# All ar integer types, but should be categorical, so changing the datatypes except for Grade
 hsl$K1A4 <- as.factor(hsl$K1A4)
 hsl$K2A1 <- as.factor(hsl$K2A1)
 hsl$K2A2 <- as.factor(hsl$K2A2)
@@ -44,6 +43,12 @@ summary(hsl$Gender)
 hsl$Gender <- factor(hsl$Gender)
 summary(hsl$Gender)
 # Gender now has 2 levels, and the correct number of observations in levels 1 and 2
+
+# Lastly, I create a new column to my dataset called High_grade
+hsl <- mutate(hsl, High_grade = Grade > 3)
+
+# Final check that everything is correct
+str(hsl)
 
 # Now saving the dataset into my local folder for use in the analysis part!
 write.table(hsl, file = "/Users/Noora/Documents/IODS-project/IODS-final/hsl.txt")

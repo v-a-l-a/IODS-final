@@ -1,11 +1,33 @@
 ---
 title: "Final Assignment"
-author: "Noora Sheridan"
-output: html_document
-theme: yeti
+author:
+ - name: "Noora Sheridan"
+ - "noora.sheridan@aalto.fi"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document:
+  toc: true
+  code_folding: hide
+  fig_caption: true
+  fig_width: 8
+  fig_height: 8
+  theme: yeti
 ---
 
-In the final assignment I am analysing Helsinki Region Transport (HSL) customer satisfaction survey.
+## Overview of the research
+
+In this assignment I am analysing Helsinki Region Transport (HSL) customer satisfaction survey openly available [here](https://hsl.louhin.com/asty/help). This dataset has been wrangled to meet the needs of my analysis, and the wrangling script is available [here](). I will use the logistic regression method to see whether or not specific variables such as gender, availability of seats and punctuality of transport to explain the target variable overall grade given to HSL. The aim is to identify factors related to high / low satisfaction with HSL.
+
+**Research question**: Which of the following variables are related to high satisfaction HSL: punctuality, space, meeting travel needs, gender, age, access to a car, value for money and frequency of use?
+
+**My hypothesis**: All of the variables except for gender and age are related to satisfaction with HSL:
+
++ Punctuality: the more punctual the transportation, the more satisfied customers are
++ Space: the more available seats there are, the more satisfied customers are
++ Meeting travel needs: the more HSL transportation meets their needs, the more satisfied customers are
++ Access to car: customers without access to car are happier with HSL (since they don't have an alternative)
++ Value for money: customers who see HSL as bringing good value for money are happier with HSL
++ Frequency of use: the more frequent the use of HSL transportation, the more satisfied customers are (since they haven't changed to another alternative - some users may on purpose avoid HSL leading to less frequent use)
 
 HSL dataset from my local folder.
 
@@ -23,3 +45,9 @@ levels:
 + T8 (Olisiko Teill?? ollut mahdollisuus k??ytt???? henkil??autoa t??ll?? matkalla?)
 + T17 (Joukkoliikenne antaa vastinetta rahalle)
 + T1 (Kuinka usein keskim????rin matkustatte t??ll?? linjalla?)
+
+## The variables
+
+so many plots
+
+## Logistic regression
