@@ -14,7 +14,7 @@ output:
 
 ## Overview of the research
 
-In this assignment I am analysing Helsinki Region Transport (HSL) customer satisfaction survey. This dataset has been wrangled to meet the needs of my analysis, and the wrangling script is available [here](https://github.com/v-a-l-a/IODS-final/blob/master/hsl_data.R). I will use the logistic regression method to see whether or not specific variables such as gender, availability of seats and punctuality of transport to explain the target variable overall grade given to HSL. The aim is to identify factors related to high / low satisfaction with HSL.
+In this assignment I am analysing Helsinki Region Transport (HSL) customer satisfaction survey. This dataset has been wrangled to meet the needs of my analysis, and the wrangling script is available [here](https://github.com/v-a-l-a/IODS-final/blob/master/creating_hsl.R). I will use the logistic regression method to see whether or not specific variables such as gender, availability of seats and punctuality of transport to explain the target variable overall grade given to HSL. The aim is to identify factors related to high / low satisfaction with HSL.
 
 **Research question**: Which of the following variables are related to high satisfaction HSL: punctuality, space, meeting travel needs, gender, age, access to a car, value for money and frequency of use?
 
@@ -89,6 +89,7 @@ library(knitr)
 crosstab1 <- hsl %>% group_by(High_grade) %>% summarise(mean_service = round(mean(Customer_service), 1), mean_punct = round(mean(Punctuality), 1), mean_space = round(mean(Space), 1), mean_needs = round(mean(Meets_needs), 1), mean_tidy = round(mean(Tidyness), 1), mean_chang = round(mean(Changing), 1))
 knitr::kable(crosstab1)
 ```
+
 Worth %:
 
 ``` {r Worth crosstab}

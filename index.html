@@ -149,7 +149,7 @@ $(document).ready(function () {
 
 <div id="overview-of-the-research" class="section level2">
 <h2>Overview of the research</h2>
-<p>In this assignment I am analysing Helsinki Region Transport (HSL) customer satisfaction survey. This dataset has been wrangled to meet the needs of my analysis, and the wrangling script is available <a href="https://github.com/v-a-l-a/IODS-final/blob/master/hsl_data.R">here</a>. I will use the logistic regression method to see whether or not specific variables such as gender, availability of seats and punctuality of transport to explain the target variable overall grade given to HSL. The aim is to identify factors related to high / low satisfaction with HSL.</p>
+<p>In this assignment I am analysing Helsinki Region Transport (HSL) customer satisfaction survey. This dataset has been wrangled to meet the needs of my analysis, and the wrangling script is available <a href="https://github.com/v-a-l-a/IODS-final/blob/master/creating_hsl.R">here</a>. I will use the logistic regression method to see whether or not specific variables such as gender, availability of seats and punctuality of transport to explain the target variable overall grade given to HSL. The aim is to identify factors related to high / low satisfaction with HSL.</p>
 <p><strong>Research question</strong>: Which of the following variables are related to high satisfaction HSL: punctuality, space, meeting travel needs, gender, age, access to a car, value for money and frequency of use?</p>
 <p><strong>My hypothesis</strong>: All of the variables except for gender and age are related to satisfaction with HSL:</p>
 <ul>
@@ -260,17 +260,9 @@ knitr::kable(crosstab1)</code></pre>
 <td align="right">4.0</td>
 <td align="right">4.3</td>
 </tr>
-<tr class="odd">
-<td align="left">Worth %:</td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="right"></td>
-</tr>
 </tbody>
 </table>
+<p>Worth %:</p>
 <pre class="r"><code>table2 &lt;- table(hsl$High_grade, hsl$Worth)
 table2 &lt;- prop.table(table2, 1)*100
 table2 &lt;- round(table2, 1)
