@@ -20,12 +20,13 @@ In this assignment I am analysing Helsinki Region Transport (HSL) customer satis
 
 **My hypothesis**: All of the variables except for gender and age are related to satisfaction with HSL:
 
++ Customer service: 
 + Punctuality: the more punctual the transportation, the more satisfied customers are
 + Space: the more available seats there are, the more satisfied customers are
 + Meeting travel needs: the more HSL transportation meets their needs, the more satisfied customers are
-+ Access to car: customers without access to car are happier with HSL (since they don't have an alternative)
 + Value for money: customers who see HSL as bringing good value for money are happier with HSL
-+ Frequency of use: the more frequent the use of HSL transportation, the more satisfied customers are (since they haven't changed to another alternative - some users may on purpose avoid HSL leading to less frequent use)
++ Tidyness:
++ Easy of changing:
 
 ## The HSL dataset
 
@@ -33,53 +34,66 @@ The original dataset includes all responses to the HSL customer satisfaction sur
 
 The first task in my data wrangling was to choose the variables to analyse because of the large number of variables and observations in the original dataset. Moreover, when exploring the variables, I noticed that some of them had a lot of missing values. For example the variable 'K1A8L' (the ferry's timetables suit my travel needs) has over 331 000 missing answers, probably explained by the fact that not many people use a ferry on day-to-day travel. However, the variable 'K3B' (overall grade for HSL-region public transport) is only missing some 10 000 responses out of over 340 000.
 
-I kept interesting variables that I suspect are related to satisfaction with HSL, as well as of course the target variable of my study, 'High_grade'. I chose for my analysis 8 different predictor variables based on the critetion that they didn't have many missing observations. I also wanted to ensure the predictor variables were diverse in the sense that they relate to different things (e.g. availability of a car, punctuality of transport). I also kept the variables gender and age that I suspect don't relate to satisfaction, to explore this assumption.
+I kept interesting variables that I suspect are related to satisfaction with HSL, as well as of course the target variable of my study, 'High_grade'. I chose for my analysis 7 different predictor variables based on the critetion that they didn't have many missing observations. I also wanted to ensure the predictor variables were diverse in the sense that they relate to different ...
 
 Here are the variables chosen for this study and the statements / questions relating to them:
 
 ``` {r colnames hsl}
-hsl <- read.table("/Users/Noora/Documents/IODS-project/IODS-final/hsl.txt", header = TRUE)
+hsl <- read.table("/Users/Noora/Documents/IODS-project/IODS-final/create_hsl.txt", header = TRUE)
 colnames(hsl)
 ```
 
-+ **Grade**: used to create 
-+ **Punctuality**: buses / carriages / ferries run according to timetable (5 levels, 1 = very badly, 5 = very well)
-+ **Space**: there are seats available on this route at this time of the day (5 levels, 1 = very badly, 5 = very well)
-+ **Meets_needs**: the route / metro / local train meets my travel needs (5 levels, 1 = very badly, 5 = very well)
-+ **Gender**: gender (2 levels, 1 = female, 2 = male)
-+ **Age**: age group (5 levels, 1 = 15-19 years, 2 = 20-29, 3 = 30-44, 4 = 45-59, 5 = 60+)
-+ **Car**: would you have had access to a car for this journey (2 levels, 1 = yes, 2 = no)
-+ **Worth**: public transportation gives value for money (2 levels, 1 = yes, 2 = no)
-+ **Frequency**: how often on average do you travel on this route? (4 levels, 1 = at least 4 days a week, 2 = 2-3 days a week, 3 = once a week, 4 = less frequently)
-+ **High_grade**: overall grade given to HSL-region transportation (2 levels, true = grade 4 or 5, false = grade 1, 2 or 3)
++ **Customer_service**: 
++ **Punctuality**: buses / carriages / ferries run according to timetable
++ **Space**: there are seats available on this route at this time of the day
++ **Meets_needs**: the route / metro / local train meets my travel needs
++ **Worth**: public transportation gives value for money
++ **Tidyness**:
++ **Changing**:
++ **High_grade**: overall grade given to HSL-region transportation
 
+All the variables (except for high grade and worth) have values between 1 and 5, with 1 = very badly, 5 = very well (i.e. they use a 5-level Likert scale). Worth is a categorical variable, and has two levels, 1 = yes, and 2 = no. High grade takes the value true if a customer has given HSL grade 4 or 5 out of 5, and false if the customer has given grade 1, 2 or 3.
+
+## Change
 I kept only these variables (and the variable 'Grade' from which 'High_grade' was created from) in my dataset called HSL. Next, I ensured that the categorical variables have data type 'factor'. I then removed all observations with missing values which reduced the number of observations but I was still left with 21 007 observations for my HSL dataset! After this I renamed the variables to those described above, as the original names didn't describe the variables well. I removed the two unused levels of variable 'Gender' from my dataset - these were 3 = 'other' and 4 = 'don't want to say' (my dataset had no observations with the values 3 or 4 for gender). Lastly, I created the new variable 'High_grade' from variable 'Grade' by setting high grade to be true if the overall grade given to HSL was either 4 or 5 when 5 = 'very good' and 1 = 'very bad'. I removed the original 'Grade' variable and then saved the dataset in my local folder.
 
 ## Exploring the variables
 
-``` {r hsl first plots P}
+``` {r hsl first plots}
 library(ggplot2)
+C1 <- ggplot(hsl, aes(x = Customer_service, fill = High_grade))
 P1 <- ggplot(hsl, aes(x = Punctuality, fill = High_grade))
 S1 <- ggplot(hsl, aes(x = Space, fill = High_grade))
 M1 <- ggplot(hsl, aes(x = Meets_needs, fill = High_grade))
-G1 <- ggplot(hsl, aes(x = Gender, fill = High_grade))
-A1 <- ggplot(hsl, aes(x = Age, fill = High_grade))
-C1 <- ggplot(hsl, aes(x = Car, fill = High_grade))
 W1 <- ggplot(hsl, aes(x = Worth, fill = High_grade))
-F1 <- ggplot(hsl, aes(x = Frequency, fill = High_grade))
+T1 <- ggplot(hsl, aes(x = Tidyness, fill = High_grade))
+Ch1 <- ggplot(hsl, aes(x = Changing, fill = High_grade))
+
 library(lattice)
 library(gridExtra)
-P <- P1 + geom_bar(position = "fill") + ggtitle("Punctuality and high grade") + scale_fill_brewer(palette = "YlOrRd", guide = F)
-S <- S1 + geom_bar(position = "fill") + ggtitle("Space and high grade") + scale_fill_brewer(palette = "YlOrRd", guide = F)
-M <- M1 + geom_bar(position = "fill") + ggtitle("Meeting needs and high grade") + scale_fill_brewer(palette = "YlOrRd", guide = F)
-G <- G1 + geom_bar(position = "fill") + ggtitle("Gender and high grade") + scale_fill_brewer(palette = "YlOrRd")
-A <- A1 + geom_bar(position = "fill") + ggtitle("Age and high grade") + scale_fill_brewer(palette = "YlOrRd", guide = F)
-C <- C1 + geom_bar(position = "fill") + ggtitle("Car and high grade") + scale_fill_brewer(palette = "YlOrRd")
-W <- W1 + geom_bar(position = "fill") + ggtitle("Worth and high grade") + scale_fill_brewer(palette = "YlOrRd", guide = F)
-Fr <- F1 + geom_bar(position = "fill") + ggtitle("Frequency and high grade") + scale_fill_brewer(palette = "YlOrRd", guide = F)
-grid.arrange(P, S, M, G, nrow = 2)
-grid.arrange(A, Fr, W, C, nrow = 2)
+C <- C1 + geom_bar(position = "fill") + ggtitle("Customer service") + scale_fill_brewer(palette = "YlOrRd", guide = F)
+P <- P1 + geom_bar(position = "fill") + ggtitle("Punctuality") + scale_fill_brewer(palette = "YlOrRd", guide = F)
+S <- S1 + geom_bar(position = "fill") + ggtitle("Space") + scale_fill_brewer(palette = "YlOrRd", guide = F)
+M <- M1 + geom_bar(position = "fill") + ggtitle("Meeting needs") + scale_fill_brewer(palette = "YlOrRd", guide = F)
+W <- W1 + geom_bar(position = "fill") + ggtitle("Worth") + scale_fill_brewer(palette = "YlOrRd")
+Ti <- T1 + geom_bar(position = "fill") + ggtitle("Tidynes") + scale_fill_brewer(palette = "YlOrRd", guide = F)
+Ch <- Ch1 + geom_bar(position = "fill") + ggtitle("Changing") + scale_fill_brewer(palette = "YlOrRd", guide = F)
+grid.arrange(C, W, P, S, nrow = 2)
+grid.arrange(M, Ti, Ch, nrow = 2)
 ```
 
-so many plots?
+The avergaes:
+``` {r hsl means}
+library(dplyr)
+library(knitr)
+crosstab1 <- hsl %>% group_by(High_grade) %>% summarise(mean_service = round(mean(Customer_service), 1), mean_punct = round(mean(Punctuality), 1), mean_space = round(mean(Space), 1), mean_needs = round(mean(Meets_needs), 1), mean_tidy = round(mean(Tidyness), 1), mean_chang = round(mean(Changing), 1))
+knitr::kable(crosstab1)
+```
+Worth %:
 
+``` {r Worth crosstab}
+table2 <- table(hsl$High_grade, hsl$Worth)
+table2 <- prop.table(table2, 1)*100
+table2 <- round(table2, 1)
+knitr::kable(addmargins(table2, margin = 2))
+```
