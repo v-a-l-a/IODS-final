@@ -14,27 +14,27 @@ output:
 
 ## Overview of the research
 
-In this assignment I am analysing Helsinki Region Transport (HSL) customer satisfaction survey. This dataset has been wrangled to meet the needs of my analysis, and the wrangling script is available [here](https://github.com/v-a-l-a/IODS-final/blob/master/creating_hsl.R). I will use the logistic regression method to see whether or not specific variables such as gender, availability of seats and punctuality of transport to explain the target variable overall grade given to HSL. The aim is to identify factors related to high / low satisfaction with HSL.
+In this assignment I am analysing Helsinki Region Transport (HSL) customer satisfaction survey. This dataset has been wrangled to meet the needs of my analysis, and the wrangling script is available [here](https://github.com/v-a-l-a/IODS-final/blob/master/creating_hsl.R). I will use the logistic regression method to see whether or not specific variables such as availability of seats and punctuality of transport explain the target variable overall grade given to HSL. The aim is to identify which factors contribute the most to high satisfaction with HSL.
 
-**Research question**: Which of the following variables are related to high satisfaction HSL: punctuality, space, meeting travel needs, gender, age, access to a car, value for money and frequency of use?
+**Research question**: Which of the following variables are contributing the most towards high satisfaction HSL: customer service, punctuality, space, meeting travel needs, value for money, tidyness and ease of changing?
 
-**My hypothesis**: All of the variables except for gender and age are related to satisfaction with HSL:
+**My hypothesis**: All of the variables are positively related to overall grade given to HSL, but some more than others:
 
-+ Customer service: 
-+ Punctuality: the more punctual the transportation, the more satisfied customers are
-+ Space: the more available seats there are, the more satisfied customers are
-+ Meeting travel needs: the more HSL transportation meets their needs, the more satisfied customers are
-+ Value for money: customers who see HSL as bringing good value for money are happier with HSL
-+ Tidyness:
-+ Easy of changing:
++ Customer service: small effect (not many interact with e.g. the bus driver)
++ Punctuality: large effect (transportation running on time seen as important)
++ Space: small effect (not of key importance for many)
++ Meeting travel needs: very large effect (very important to customers)
++ Value for money: large effect (very important to customers)
++ Tidyness: small effect (not very important)
++ Ease of changing: medium effect (important to some but not to others)
 
 ## The HSL dataset
 
-The original dataset includes all responses to the HSL customer satisfaction survey openly available [here](https://hsl.louhin.com/asty/help). The original dataset has 340 378 observations and 127 variables, with the variables relating to questions about the respondent (e.g. age, gender, occupation), to their travel (e.g. frequency of use of current buss / train, access to a car), to their opinion about HSL transportation (e.g. customer service, tidyness of buses etc., overall grade given to HSL) and to other factors such as how they search for information about timetables or pay for their journeys.
+The original dataset includes all responses to the HSL customer satisfaction survey openly available [here](https://hsl.louhin.com/asty/help). The original dataset has 340 378 observations and 127 variables, with the variables relating to the respondent (e.g. age, gender, occupation), to their travel (e.g. frequency of use of current buss / train, access to a car), to their opinion about HSL transportation (e.g. customer service, tidyness of buses etc., overall grade given to HSL) and to other factors such as how they search for information about timetables or pay for their journeys.
 
 The first task in my data wrangling was to choose the variables to analyse because of the large number of variables and observations in the original dataset. Moreover, when exploring the variables, I noticed that some of them had a lot of missing values. For example the variable 'K1A8L' (the ferry's timetables suit my travel needs) has over 331 000 missing answers, probably explained by the fact that not many people use a ferry on day-to-day travel. However, the variable 'K3B' (overall grade for HSL-region public transport) is only missing some 10 000 responses out of over 340 000.
 
-I kept interesting variables that I suspect are related to satisfaction with HSL, as well as of course the target variable of my study, 'High_grade'. I chose for my analysis 7 different predictor variables based on the critetion that they didn't have many missing observations. I also wanted to ensure the predictor variables were diverse in the sense that they relate to different ...
+I kept interesting variables that I suspect are related to satisfaction with HSL, as well as of course the target variable of my study, 'High_grade'. I chose for my analysis 7 different predictor variables based on the critetion that they didn't have many missing observations and that they relate to things HSL could fairly easily change (e.g. provide more customer service training or tidy the busses more often or more thoroughly). This allows me to compare the effects these variables have on satisfaction with HSL so that it is possible to give suggestions about which things to prioritise to improve customer satisfaction.
 
 Here are the variables chosen for this study and the statements / questions relating to them:
 
@@ -43,23 +43,58 @@ hsl <- read.table("/Users/Noora/Documents/IODS-project/IODS-final/create_hsl.txt
 colnames(hsl)
 ```
 
-+ **Customer_service**: 
-+ **Punctuality**: buses / carriages / ferries run according to timetable
++ **Customer_service**: drivers / personnel give friendly customer service
++ **Punctuality**: busses / carriages / ferries run according to timetable
 + **Space**: there are seats available on this route at this time of the day
 + **Meets_needs**: the route / metro / local train meets my travel needs
 + **Worth**: public transportation gives value for money
-+ **Tidyness**:
-+ **Changing**:
++ **Tidyness**: busses / carriages / ferries are tidy
++ **Changing**: changing to another route is easy
 + **High_grade**: overall grade given to HSL-region transportation
 
 All the variables (except for high grade and worth) have values between 1 and 5, with 1 = very badly, 5 = very well (i.e. they use a 5-level Likert scale). Worth is a categorical variable, and has two levels, 1 = yes, and 2 = no. High grade takes the value true if a customer has given HSL grade 4 or 5 out of 5, and false if the customer has given grade 1, 2 or 3.
 
-## Change
-I kept only these variables (and the variable 'Grade' from which 'High_grade' was created from) in my dataset called HSL. Next, I ensured that the categorical variables have data type 'factor'. I then removed all observations with missing values which reduced the number of observations but I was still left with 21 007 observations for my HSL dataset! After this I renamed the variables to those described above, as the original names didn't describe the variables well. I removed the two unused levels of variable 'Gender' from my dataset - these were 3 = 'other' and 4 = 'don't want to say' (my dataset had no observations with the values 3 or 4 for gender). Lastly, I created the new variable 'High_grade' from variable 'Grade' by setting high grade to be true if the overall grade given to HSL was either 4 or 5 when 5 = 'very good' and 1 = 'very bad'. I removed the original 'Grade' variable and then saved the dataset in my local folder.
+After choosing the variables described above for my analysis, I removed all observations with missing values from my dataset called 'hsl'. This reduced the number of observations but I was still left with 16 689 observations for my HSL dataset!
+
+``` {r hsl dimensions}
+dim(hsl)
+```
+
+I renamed all the variables to be more descriptive. I also created the variable 'High_Grade' from variable 'Grade' by setting high grade to be true if the overall grade given to HSL was either 4 or 5 when 5 = 'very good' and 1 = 'very bad'. After this I removed the original 'Grade' variable from my dataset. Lastly I ensured that 'Worth' was a categorical variable and then saved the dataset in my local folder.
 
 ## Exploring the variables
 
-``` {r hsl first plots}
+Next I will look at summaries of the variables to get an idea of how they are distributed.
+
+``` {r hsl summaries of the variables}
+knitr::kable(summary(hsl))
+```
+
+It seems that...
+
+I will also explore whether the average scores given for each variable differ between those who are highly satisfied and those who are not.
+
+``` {r message = (FALSE)}
+library(dplyr)
+library(knitr)
+crosstab1 <- hsl %>% group_by(High_grade) %>% summarise(mean_service = round(mean(Customer_service), 1), mean_punct = round(mean(Punctuality), 1), mean_space = round(mean(Space), 1), mean_needs = round(mean(Meets_needs), 1), mean_tidy = round(mean(Tidyness), 1), mean_chang = round(mean(Changing), 1))
+knitr::kable(crosstab1)
+```
+
+From this I see that for all variables, the average score given by highly satisfied customers is higher than the average score given by not highly satisfied customers. However, for some variables the differences are larger than for others.
+
+Worth %:
+
+``` {r Worth crosstab}
+table2 <- table(hsl$High_grade, hsl$Worth)
+table2 <- prop.table(table2, 1)*100
+table2 <- round(table2, 1)
+knitr::kable(addmargins(table2, margin = 2))
+```
+
+Next I will explore the variables chosen for my study to get an overview of how they relate to high satisfaction.
+
+``` {r hsl first plots, message = (FALSE)}
 library(ggplot2)
 C1 <- ggplot(hsl, aes(x = Customer_service, fill = High_grade))
 P1 <- ggplot(hsl, aes(x = Punctuality, fill = High_grade))
@@ -82,19 +117,4 @@ grid.arrange(C, W, P, S, nrow = 2)
 grid.arrange(M, Ti, Ch, nrow = 2)
 ```
 
-The avergaes:
-``` {r hsl means}
-library(dplyr)
-library(knitr)
-crosstab1 <- hsl %>% group_by(High_grade) %>% summarise(mean_service = round(mean(Customer_service), 1), mean_punct = round(mean(Punctuality), 1), mean_space = round(mean(Space), 1), mean_needs = round(mean(Meets_needs), 1), mean_tidy = round(mean(Tidyness), 1), mean_chang = round(mean(Changing), 1))
-knitr::kable(crosstab1)
-```
-
-Worth %:
-
-``` {r Worth crosstab}
-table2 <- table(hsl$High_grade, hsl$Worth)
-table2 <- prop.table(table2, 1)*100
-table2 <- round(table2, 1)
-knitr::kable(addmargins(table2, margin = 2))
-```
+It is clear that all of the variables seem to be related to high grade. For example for the variable 'Changing', very large proportion of customers who rate changing as 5 are highly satisfied with HSL, but for those who rate changing as 1, a much smaller proportion of customers are highly satisfied. The same is true for all the other variables using Likert scale. For 'Worth', as well, a very large proportion of customers who think public transportation gives value for money are highly satisfied, whereas for those who think it doesn't give value for money, the proportions of highly satisfied and not highly satisfied customers are more even. The main difference seen in these plots is that for some variables, even when the variable has value 1, the proportions of highly satisfied and not highly satisfied customers are faily even, whereas for other variables proportionally more customers seem to be not highly satisfied.
