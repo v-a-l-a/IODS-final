@@ -14,16 +14,16 @@ output:
 
 ## Abstract
 
-In this assignment I study the results of Helsinki Region Transport (HSL) customer satisfaction survey to see how customer service, punctuality of transportation, space available, meeting customers' travel needs, tidyness of transportation, and ease of changing routes relate to high satisfaction levels with HSL. In this assignment I use logistic regression to analyse how the different variables relate to high satisfaction with HSL, and to create a model used to classify observations by predicting whether a customer has high satisfaction with HSL or not.
+In this assignment I study the results of Helsinki Region Transport (HSL) customer satisfaction survey to see how customer service, punctuality of transportation, space available, meeting customers' travel needs, tidyness of transportation, and ease of changing routes relate to high satisfaction levels with HSL. In this assignment I use logistic regression to analyse how the different variables relate to high satisfaction with HSL, and to create a model used to classify observations by predicting whether a customer has high satisfaction with HSL or not. High satisfaction is defined as overall grade 4 or 5 in a scale of 1 to 5 given to HSL.
 
 The findings of this assignment are that all the variables studied are positively related to high satisfaction, with customer service having the highest odds ratio and space the lowest. The predictive power of the model created is fairly good (about 88% of observations are classified correctly). One of the key benefits of the findings to HSL is that the model created could enable fairly accurate predictions of customer satisfaction through gathering data from HSL's operations, thus HSL could get an indication about satisfaction levels on different routes without the need to rely on customer satisfaction surveys, and take more timely action. The second benefit is that HSL could use information about the odds ratios of different variables to choose which factors to focus on (e.g. to emphasis customer service skills on recruitment and selection).
 
 
 ## Overview of the research
 
-In this assignment I am analysing Helsinki Region Transport (HSL) customer satisfaction survey. This dataset has been wrangled to meet the needs of my analysis, and the wrangling script is available [here](https://github.com/v-a-l-a/IODS-final/blob/master/creating_hsl.R). I will use the logistic regression method to see whether or not specific variables such as availability of seats and punctuality of transport explain the target variable overall grade given to HSL. The aim is to identify which factors contribute the most to high satisfaction with HSL.
+In this assignment I am analysing Helsinki Region Transport (HSL) customer satisfaction survey. This dataset has been wrangled to meet the needs of my analysis, and the wrangling script is available [here](https://github.com/v-a-l-a/IODS-final/blob/master/creating_hsl.R). I will use the logistic regression method to see whether or not specific variables such as availability of seats and punctuality of transport explain the target variable overall grade given to HSL. The aim is to identify which factors contribute the most to high satisfaction with HSL. High satisfaction is defined as overall grade 4 or 5 out of 5 given to HSL.
 
-**Research question**: Which of the following variables are contributing the most towards high satisfaction HSL: customer service, punctuality, space, meeting travel needs, tidyness and ease of changing?
+**Research question**: Which of the following variables are contributing the most towards high satisfaction with HSL: customer service, punctuality of transportation, availability of seats (space), transportation meeting travel needs, tidyness of busses / carriages etc. and ease of changing routes?
 
 **My hypothesis**: All of the variables are positively related to overall grade given to HSL, but some more than others:
 
@@ -36,7 +36,7 @@ In this assignment I am analysing Helsinki Region Transport (HSL) customer satis
 
 ## The HSL dataset
 
-The original dataset includes all responses to the HSL customer satisfaction survey openly available [here](https://hsl.louhin.com/asty/help). The original dataset has 340 378 observations and 127 variables, with the variables relating to the respondent (e.g. age, gender, occupation), to their travel (e.g. frequency of use of current buss / train, access to a car), to their opinion about HSL transportation (e.g. customer service, tidyness of buses etc., overall grade given to HSL) and to other factors such as how they search for information about timetables or pay for their journeys.
+The original dataset includes all responses to the HSL customer satisfaction survey openly available [here](https://hsl.louhin.com/asty/help). The original dataset has 340 378 observations and 127 variables, with the variables relating to the respondents (e.g. age, gender, occupation), to their travel (e.g. frequency of use of current bus / train, access to a car), to their opinion about HSL transportation (e.g. customer service, tidyness of busses etc., overall grade given to HSL) and to other factors such as how they search for information about timetables or pay for their journeys.
 
 The first task in my data wrangling was to choose the variables to analyse because of the large number of variables and observations in the original dataset. Moreover, when exploring the variables, I noticed that some of them had a lot of missing values. For example the variable 'K1A8L' (the ferry's timetables suit my travel needs) has over 331 000 missing answers, probably explained by the fact that not many people use a ferry on day-to-day travel. However, the variable 'K3B' (overall grade for HSL-region public transport) is only missing some 10 000 responses out of over 340 000.
 
@@ -57,9 +57,7 @@ colnames(hsl)
 + **Changing**: changing to another route is easy
 + **High_grade**: overall grade given to HSL-region transportation
 
-All the variables (except for high grade) have values between 1 and 5, with 1 = very badly, 5 = very well (i.e. they use a 5-level Likert scale). High grade takes the value true if a customer has given HSL grade 4 or 5 out of 5, and false if the customer has given grade 1, 2 or 3.
-
-After choosing the variables described above for my analysis, I removed all observations with missing values from my dataset called 'hsl'. This reduced the number of observations but I was still left with 225 492 observations for my HSL dataset!
+All the variables (except for high grade) have values between 1 and 5, with 1 = very badly, 5 = very well (i.e. they use a 5-level Likert scale). After choosing the variables described above for my analysis, I removed all observations with missing values from my dataset called 'hsl'. This reduced the number of observations but I was still left with 225 492 observations for my HSL dataset!
 
 ``` {r hsl dimensions}
 dim(hsl)
@@ -75,13 +73,18 @@ Next I will look at summaries of the variables to get an idea of how they are di
 knitr::kable(summary(hsl))
 ```
 
-It is clear that the majority of customers are very satisfied with HSL, with there being over 190 000 highly satisfied customers compared to about 32 000 not highly satisfied. It seems that all the predictor variables take on very high values all in general. The mean for all the predictor variables is between approx. 3.9 and 4.5, thus it is clear HSL is in general doing very well with e.g. availability of seats on routes. All of these  variables are distributed between 1 and 5, but the first quartile values are very high (3 or 4) so only 25% of respondents have given lower values for the variables.
+*Table 1: Summaries of the variables*
+
+
+It is clear that the majority of customers are very satisfied with HSL, with there being over 190 000 highly satisfied customers compared to about 32 000 not highly satisfied. It seems that all the predictor variables take on very high values in general. The mean for all the predictor variables is between approx. 3.9 and 4.5, thus it is clear HSL is in general doing very well with different factors such as availability of seats on routes or meeting customers' needs. All of these  variables are distributed between 1 and 5, but the first quartile values are very high (3 or 4) so only 25% of respondents have given lower values for the variables.
 
 ``` {r hsl summaries of the variables, warning = (FALSE)}
 library(ggplot2)
 library(tidyr)
 gather(hsl) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar()
 ```
+
+*Figure 1: Overview of the distribution of the variables*
 
 This visualisation shows that all the predictor variables have very few low values (1 or 2), but that they differ in terms of how many customers have rated the variable 4 or 5. For example when looking at 'Meets_needs', clearly the largest bar is that corresponding to value 5, whereas for 'Customer_service' clearly the largest is 4, and 5 is even a bit lower than 3. For changing 4 and 5 are fairly equal height (meaning that there are roughly equal amount of observations with changing 4 and changing 5, although there are a bit more for 4 as it is a bit higher).
 
@@ -93,6 +96,8 @@ library(knitr)
 crosstab1 <- hsl %>% group_by(High_grade) %>% summarise(mean_service = round(mean(Customer_service), 1), mean_punct = round(mean(Punctuality), 1), mean_space = round(mean(Space), 1), mean_needs = round(mean(Meets_needs), 1), mean_tidy = round(mean(Tidyness), 1), mean_chang = round(mean(Changing), 1))
 knitr::kable(crosstab1)
 ```
+
+*Table 2: The differences between the mean values of variables between highly and not highly satisfied customers*
 
 From this I see that for all variables, the average score given by highly satisfied customers is higher than the average score given by not highly satisfied customers. However, for some variables the differences are larger than for others, with punctuality and changing having a 0.8 point difference whereas space only has a 0.3 point difference.
 
@@ -124,14 +129,14 @@ g_legend<-function(a.gplot){
 plotlegend<-g_legend(Ch)
 
 grid.arrange(C, P, S, M, nrow = 2)
-grid.arrange(Ti, Ch + theme(legend.position = "none"), nrow = 2, plotlegend, ncol = 2)
+grid.arrange(Ti, Ch + theme(legend.position = "none"), nrow = 2, plotlegend, ncol = 2, bottom = "Figure 2: Proportions of high grade")
 ```
 
 It is clear that all of the variables seem to be related to high grade. For example for the variable 'Changing', very large proportion of customers who rate changing as 5 are highly satisfied with HSL, but for those who rate changing as 1, a much smaller proportion of customers are highly satisfied. The same is true for all the other variables. The main difference seen in these plots is that for some variables, even when the variable has value 1, the proportions of highly satisfied and not highly satisfied customers are faily even (e.g. for space), whereas for other variables proportionally more customers seem to be not highly satisfied at the variable's value 1 (e.g. changing).
 
 ## Logistic regression analysis
 
-Logistic regression analysis can be used to identify factors related to the target variable, in this case high satisfaction with HSL. It can also be useful to predict customers who have high satisfaction with HSL (and who don't). This can be useful because HSL should be able to gather information about e.g. how well specific routes run on time, how often specific busses or other transportation are cleaned etc. and thus be able to predict how satisfied customers are with a logistic regression model created. If it predicts customers are not very satisfied on specific routes, it can take action to improve factors related to high satisfaction.
+Logistic regression analysis can be used to identify factors related to the target variable, in this case high satisfaction with HSL. It can also be useful to predict customers who have high satisfaction with HSL (and who don't). This can be useful because HSL should be able to gather information about e.g. how well specific routes run on time, how often specific busses or other transportation are cleaned etc. and thus be able to predict how satisfied customers are with a logistic regression model created. If the model predicts customers are not very satisfied on specific routes, HSL can take action to improve factors related to high satisfaction.
 
 With logistic regressions, I can obtain odds ratios for each variable. The odds ratios are the exponents of each variable's coefficient obtained with logistic regression analysis. In my model, the odds ratio of a variable describes the % increase in the odds of having high satisfaction with HSL for a one-unit increase in the variable in question, holding all other variables in the model fixed.
 
@@ -149,6 +154,8 @@ odds_ratio <- coef(m) %>% exp
 conf_I <- confint(m) %>% exp
 cbind(odds_ratio, conf_I)
 ```
+
+*Table 3: Odds ratios of the variables*
 
 From the output I can see that none of the variables'  95% confidence intervals (CI) include 1. This further demonstrates that they should be kept in the model, as all of them are related to high satisfaction. All of the predictor variables' odds ratios are above 1, meaning that they are positively related with high grade. The differences between the variables are not very large, none of the odds ratios are below 1 or above 2. The confidence intervals of all of the variables are very small, showing that we can be fairly confident that the estimated odds ratios are accurate. 
 
@@ -168,6 +175,8 @@ table2 <- prop.table(table1, 2)*100
 table2 <- round(table2, 1)
 addmargins(table2, margin = 1)
 ```
+
+*Tables 4 & 5: Predictions about high grade*
 
 The model seems to be quite good at predicting high satifaction! However, it does predict approx. 24 000 observations that have actually not given HSL a high grade to have given a high grade. However, from table X I see that of those observations predicted to have given HSL a high grade, 89% were correct, and only 11% wrong. Out of those predicted to not have given HSL a high grade, 67% were correct, but 33%, i.e. a third, were incorrect. Thus in % terms the model's predictions about high grade are quite accurate, whereas its predictions about not high grade are less accurate.
 
@@ -208,6 +217,8 @@ When comparing the results to my original hypotheses, I see that most of them we
 | Meeting needs | very large effect | medium | wrong | 
 | Tidyness | small effect | medium | wrong | 
 | Changing | medium effect | large | wrong | 
+*Table 6: Comparison of hypotheses and actual results*
+
 
 The results have two implications for HSL. Firstly, it might be able to predict how satisfied customers are on specific routes without conducting a survey. It could assess how easy it is to change to another route, test the customer service skills of employees, and gather information about how well specific routes' transportation is on time, and conduct analysis of how tidy the busses / carriages etc. are. With the results of such analysis, it would be possible to predict with the model generated to get an idea of which routes' customers are likely to be the most or the least satisfied with HSL. This could enable HSL to take action immediately, rather than wait for the results of a customer satisfaction survey and then take action. Moreover, I assume much of the information needed to generate the predictions is already available to HSL, such as information about the condition of busses / carriages / ferries, and information about how well they are on time.
 

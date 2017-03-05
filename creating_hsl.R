@@ -1,4 +1,4 @@
-# Details: Noora Sheridan (noora.sheridan@aalto.fi), 24.2.2017
+# Details: Noora Sheridan (noora.sheridan@aalto.fi), 5.3.2017
 # In this file I do data wrangling on a dataset about Helsinki Region Transport (HSL) customer satisfaction survey.
 # The dataset is openly available and was obtained from here: https://hsl.louhin.com/asty/help
 
