@@ -113,9 +113,18 @@ P <- P1 + geom_bar(position = "fill") + ggtitle("Punctuality") + scale_fill_brew
 S <- S1 + geom_bar(position = "fill") + ggtitle("Space") + scale_fill_brewer(palette = "YlOrRd", guide = F)
 M <- M1 + geom_bar(position = "fill") + ggtitle("Meeting needs") + scale_fill_brewer(palette = "YlOrRd", guide = F)
 Ti <- T1 + geom_bar(position = "fill") + ggtitle("Tidynes") + scale_fill_brewer(palette = "YlOrRd", guide = F)
-Ch <- Ch1 + geom_bar(position = "fill") + ggtitle("Changing") + scale_fill_brewer(palette = "YlOrRd")
+Ch <- Ch1 + geom_bar(position = "fill") + ggtitle("Changing") + scale_fill_brewer(palette = "YlOrRd") + theme(legend.position = "bottom")
+
+g_legend<-function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)}
+
+plotlegend<-g_legend(Ch)
+
 grid.arrange(C, P, S, M, nrow = 2)
-grid.arrange(Ti, Ch, nrow = 2)
+grid.arrange(Ti, Ch + theme(legend.position = "none"), nrow = 2, plotlegend, ncol = 2)
 ```
 
 It is clear that all of the variables seem to be related to high grade. For example for the variable 'Changing', very large proportion of customers who rate changing as 5 are highly satisfied with HSL, but for those who rate changing as 1, a much smaller proportion of customers are highly satisfied. The same is true for all the other variables. The main difference seen in these plots is that for some variables, even when the variable has value 1, the proportions of highly satisfied and not highly satisfied customers are faily even (e.g. for space), whereas for other variables proportionally more customers seem to be not highly satisfied at the variable's value 1 (e.g. changing).
