@@ -10,27 +10,24 @@ dim(hsl)
 # There are over 340 000 observations and 127 variables!
 
 # First I keep only the variables that relate to my research question.
-keep <- c("K3B", "K1A1", "K1A4", "K2A1", "K2A2", "T17", "K1A5", "K2A4")
+keep <- c("K3B", "K1A1", "K1A4", "K2A1", "K2A2", "K1A5", "K2A4")
 library(dplyr)
 hsl <- select(hsl, one_of(keep))
 
 # I still have ovr 340 000 observations but next I remove all with N/A values in any of the variables.
 hsl <- filter(hsl, complete.cases(hsl) == TRUE)
 dim(hsl)
-# I still have 16 689 observations in my dataset, which seems enough, and values for all the 8 variables.
+# I still have over 225 000 observations in my dataset, and values for all the 7 variables!
 
 # Next I rename my variabls to have more easy to understand names.
-colnames(hsl)[1:8] <- c("Grade", "Customer_service", "Punctuality", "Space", "Meets_needs", "Worth", "Tidyness", "Changing")
+colnames(hsl)[1:7] <- c("Grade", "Customer_service", "Punctuality", "Space", "Meets_needs", "Tidyness", "Changing")
 str(hsl)
 # Worked!
 
 # I create a new column to my dataset called High_grade, and drop the 'Grade' column
 hsl <- mutate(hsl, High_grade = Grade > 3)
-keep2 <- c("Customer_service", "Punctuality", "Space", "Meets_needs", "Worth", "Tidyness", "Changing", "High_grade")
+keep2 <- c("Customer_service", "Punctuality", "Space", "Meets_needs", "Tidyness", "Changing", "High_grade")
 hsl <- select(hsl, one_of(keep2))
-
-# Makin Worth into categorical and naming the levels
-hsl$Worth <- factor(hsl$Worth, levels = c(1,2), labels = c("yes", "no"))
 
 # Checking that everything is ok
 str(hsl)
