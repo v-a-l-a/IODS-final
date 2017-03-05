@@ -10,6 +10,7 @@
 
 
 <meta name="author" content="Noora Sheridan" />
+<meta name="author" content="noora.sheridan@aalto.fi" />
 
 
 <title>IODS course project</title>
@@ -135,6 +136,8 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">IODS course project</h1>
 <h4 class="author"><em>Noora Sheridan</em></h4>
+<h4 class="author"><em><a href="mailto:noora.sheridan@aalto.fi">noora.sheridan@aalto.fi</a></em></h4>
+<h4 class="date"><em>5.3.2017</em></h4>
 
 </div>
 
@@ -441,7 +444,7 @@ loss_func(class = hsl_pred$High_grade, prob = hsl_pred$probability)</code></pre>
 <pre class="r"><code>library(boot)
 cross_v &lt;- cv.glm(data = hsl_pred, cost = loss_func, glmfit = m, K = 10)
 cross_v$delta[1]</code></pre>
-<pre><code>## [1] 0.1248869</code></pre>
+<pre><code>## [1] 0.1247539</code></pre>
 <p>Now, the proportion of inaccurately classified observations is 12.5%, so roughly the same as the 12.4% obtained above. I can conclude that the model is fairly accurate.</p>
 </div>
 <div id="conclusion-and-discussion" class="section level2">

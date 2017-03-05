@@ -1,6 +1,9 @@
 ---
 title: "IODS course project"
-author: "Noora Sheridan"
+author:
+- "Noora Sheridan"
+- "noora.sheridan@aalto.fi"
+date: 5.3.2017
 output:
   html_document:
     theme: yeti
@@ -10,6 +13,8 @@ output:
     fig_width: 6
     fig_height: 4
     code_folding: hide
+    warning: FALSE
+    message: FALSE
 ---
 
 ## Abstract
